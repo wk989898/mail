@@ -1,0 +1,23 @@
+{
+  "name": "node-mail-client",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "example"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wk989898/mail.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wk989898/mail/issues"
+  },
+  "homepage": "https://github.com/wk989898/mail#readme"
+}
