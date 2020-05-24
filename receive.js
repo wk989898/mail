@@ -8,6 +8,7 @@ module.exports = function imap(opt, setNum, callback) {
   console.log('imap start receive email')
   let result = []
   var _imap = new Imap(opt)
+  
   function openBox(cb) {
     _imap.openBox('INBOX', cb)
   }
@@ -108,15 +109,20 @@ module.exports = function imap(opt, setNum, callback) {
   _imap.connect()
   _imap.on('ready', () => {
     openBox((err, box) => {
+      if(err) console.error('openBox error\n',err);
       let num = `${box.messages.total}:*`
       if (setNum) num = setNum(box.messages.total)
       getMsgByUID(num, function (err) {
-        if (err) throw err
+        if (err) console.error('getMsgByUID\n',err)
         _imap.end()
         console.log('success,received %d emails',result.length)
         callback(result)
       })
     })
+  })
+
+  _imap.on('error',(err)=>{
+    console.log('imap connect error\n',err.message);
   })
 }
 

@@ -1,5 +1,7 @@
 const imap = require('./receive.js')
 const smtp = require('./send.js')
+const net=require('net')
+const tls=require('tls')
 
 class mail {
   /**
@@ -13,13 +15,14 @@ class mail {
     this.pass = pass
     this.imap = imap
     this.smtp = smtp
+    this.checkAuth()
   }
   /**
    * @param {Function} setNum
    * @param {Function} callback 
    */
   receive(setNum, callback) {
-    const [host, port, tls = true] = this.imap 
+    const [host, port, tls = true] = this.imap
     const opt = {
       user: this.user,
       password: this.pass,
@@ -40,7 +43,8 @@ class mail {
     // from,
     to, subject, text, html
   }) {
-    let [host, port, secure = false] = this.smtp 
+    if(!this.check) throw new Error('check fail')
+    let [host, port, secure = false] = this.smtp
     let opt = {
       host,
       port,
@@ -55,11 +59,53 @@ class mail {
       to, subject, text, html
     })
   }
-  
-  test({to, subject, text, html}){
-    smtp(null,{
-      to,subject,text,html
+  async checkAuth() {
+    const [host, port] = this.smtp
+    let socket
+    try {
+      socket =  tls.connect({
+        host,port,timeout:5000
+      }).on('data', (data) => {
+        data = data.toString()
+        console.log(data);
+        if (/^220/.test(data)) {
+          socket.write('helo localhost\r\n')
+        } else if (/^250/.test(data)) {
+          socket.write('auth login\r\n')
+        } else if (/^334/.test(data)) {
+          let temp = this.decode(data.slice(3))
+          if (/username/i.test(temp)) socket.write(this.encode(this.user.split('@')[0]) + '\r\n')
+          else socket.write(this.encode(this.pass) + '\r\n')
+        } else if (/^235/.test(data)) {
+          socket.write('quit\r\n')
+          console.log('auth check success')
+        } else if (/^5\d{2}/.test(data)) {
+          socket.write('quit\r\n')
+          throw new Error(data)
+        } else if (/^221/.test(data)) console.log('close');
+        else {
+          socket.write('quit\r\n')
+          throw new Error('unknow error\n'+data)
+        }
+      }).on('error', (e) => {
+        throw new Error('fail check\nplease ensure ssl port')
+      }).on('timeout',()=>{
+        throw new Error('timeout')
+      })
+    } catch (error) {
+      throw new Error('connect error\n'+error.message)
+    }
+  }
+  test({ to, subject, text, html }) {
+    smtp(null, {
+      to, subject, text, html
     })
+  }
+  encode(str) {
+    return Buffer.from(str).toString('base64')
+  }
+  decode(str) {
+    return Buffer.from(str, 'base64').toString()
   }
 }
 
