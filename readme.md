@@ -1,4 +1,4 @@
-# mail
+# node-mail-client
 ## Intro
 a email client to receive and send mail  
 base IMAP and STMP
