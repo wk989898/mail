@@ -8,6 +8,7 @@ let m = new mail({
   smtp: ['smtp.*.com', 465]
 })
 m.receive(null,result => {
+  console.log('message total :',result.pop())
   fs.writeFile('./data.js', 'var data='+JSON.stringify(result), () => { })
 })
 // m.test({

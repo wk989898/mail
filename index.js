@@ -1,5 +1,5 @@
-const imap = require('./receive.js')
-const smtp = require('./send.js')
+const imap = require('./src/receive.js')
+const smtp = require('./src/send.js')
 const net=require('net')
 const tls=require('tls')
 

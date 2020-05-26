@@ -3,7 +3,9 @@
 a email client to receive and send mail  
 base IMAP and STMP
 ## Installation
-`npm install node-mail-client`
+``` js
+npm install node-mail-client
+```
 ## Usage
 ```js
 const mailClient=require('node-mail-client')
@@ -24,7 +26,7 @@ total(Integer)  `INBOX` mailbox messages
 num(string)  like `1:10` or `1:*`
 
 callback:(result):unknow=>{}
-result(Array) include `header` `body` `attr` `contentType`
+result(Array) `total=result.pop()` other item include `header` `body` `attr` `contentType`
 
 send:
   {
@@ -34,6 +36,7 @@ send:
      html: "<b>Hello world?</b>", // html body
   }  
 ```
+### [example](./example/test.js)
 ## Documention
 you could find specify  about API  
 [send](https://nodemailer.com/about/)  

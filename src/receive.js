@@ -116,6 +116,7 @@ module.exports = function imap(opt, setNum, callback) {
         if (err) console.error('getMsgByUID\n',err)
         _imap.end()
         console.log('success,received %d emails',result.length)
+        result.push(box.messages.total)
         callback(result)
       })
     })

@@ -2,7 +2,7 @@
 const nodemailer = require("nodemailer");
 
 
-module.exports = function stmp(opt, options) {
+module.exports = function smtp(opt, options) {
   let info
   async function start() {
     console.log('stmp start send email')
