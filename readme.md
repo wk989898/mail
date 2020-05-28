@@ -36,7 +36,7 @@ send:
      html: "<b>Hello world?</b>", // html body
   }  
 ```
-### [example](./example/test.js)
+### Here is a [example](./example/test.js)
 ## Documention
 you could find specify  about API  
 [send](https://nodemailer.com/about/)  
