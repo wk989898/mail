@@ -8,6 +8,8 @@ npm install node-mail-client
 ```
 ## Usage
 ```js
+// these methods all returned promise
+
 const mailClient=require('node-mail-client')
 let mail=new mailClient({
   user:`*@gmail.com`, // your user 
@@ -15,7 +17,10 @@ let mail=new mailClient({
   imap:['imap.*.com',993], // [host,port,tls]
   smtp:['smtp.*.com',587] // [host,port,secure]
 })
-mail.send({ to, subject, text, html })
+mail.checkAuth().then(self=>{
+  self.send({ to, subject, text, html })
+}).catch(console.error)
+
 mail.receive(setNum, callback)
 ```
 ## API
