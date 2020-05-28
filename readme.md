@@ -21,12 +21,12 @@ mail.receive(setNum, callback)
 ## API
 ```ts
 receive:
-setNum:(total):num=>{}
+setNum:(total):num|undefined =>{}
 total(Integer)  `INBOX` mailbox messages 
-num(string)  like `1:10` or `1:*`
+num(string|undefined)  like `1:10` or `1:*`
 
 callback:(result):unknow=>{}
-result(Array) `total=result.pop()` other item include `header` `body` `attr` `contentType`
+result(Array)  item include `header` `body` `attr` `contentType`
 
 send:
   {

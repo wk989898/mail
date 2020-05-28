@@ -7,7 +7,7 @@ class mail {
   /**
    * @param {string} user complete address
    * @param {string} pass  password
-   * @param {Array} imap [host,port[],option]]
+   * @param {Array} imap [host,port[,option]]
    * @param {Array} smtp [host[,port,option]]
    */
   constructor({ user, pass, imap, smtp }) {
@@ -18,10 +18,10 @@ class mail {
     this.checkAuth()
   }
   /**
-   * @param {Function} setNum control receive mails num
+   * @param {Function} setNum 
+   * (num)=>{} control receive mails num .it returned like '1:10' or '1:*'
    * @param {Function} callback 
    * (result)=>{} result include `header` `body` `attr` `contentType`
-   * last item is receive mails num 
    */
   receive(setNum, callback) {
     const [host, port, tls = true] = this.imap

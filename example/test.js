@@ -7,8 +7,11 @@ let m = new mail({
   imap: ['imap.*.com', 993],
   smtp: ['smtp.*.com', 465]
 })
-m.receive(null,result => {
-  console.log('message total :',result.pop())
+let total
+m.receive((total)=>{
+  total=total
+},result => {
+  console.log('message total :',total)
   fs.writeFile('./data.js', 'var data='+JSON.stringify(result), () => { })
 })
 // m.test({

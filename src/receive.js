@@ -111,12 +111,11 @@ module.exports = function imap(opt, setNum, callback) {
     openBox((err, box) => {
       if(err) console.error('openBox error\n',err);
       let num = `${box.messages.total}:*`
-      if (setNum) num = setNum(box.messages.total)
+      if (setNum) num = setNum(box.messages.total)||`${box.messages.total}:*`
       getMsgByUID(num, function (err) {
         if (err) console.error('getMsgByUID\n',err)
         _imap.end()
         console.log('success,received %d emails',result.length)
-        result.push(box.messages.total)
         callback(result)
       })
     })
