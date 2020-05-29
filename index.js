@@ -5,7 +5,6 @@ const tls = require('tls')
 
 class mail {
   // error collect
-  err;
   /**
    * @param {string} user complete address
    * @param {string} pass  password
@@ -19,6 +18,7 @@ class mail {
     this.smtp = smtp
     this.check = 0
     this.checking = false
+    this.err='init'
   }
   /**
    * @param {Function} setNum 

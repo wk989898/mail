@@ -1,6 +1,6 @@
 {
   "name": "node-mail-client",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "email client",
   "main": "index.js",
   "directories": {
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/wk989898/mail.git"
   },
   "keywords": ["mail","smtp","imap"],
-  "author": "",
+  "author": "WK989898",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/wk989898/mail/issues"
