@@ -4,6 +4,8 @@ const net = require('net')
 const tls = require('tls')
 
 class mail {
+  // error collect
+  err;
   /**
    * @param {string} user complete address
    * @param {string} pass  password
@@ -16,6 +18,7 @@ class mail {
     this.imap = imap
     this.smtp = smtp
     this.check = 0
+    this.checking = false
   }
   /**
    * @param {Function} setNum 
@@ -24,6 +27,7 @@ class mail {
    * (result)=>{} result include `header` `body` `attr` `contentType`
    */
   receive(setNum, callback) {
+    if (this.checking) return;
     if (this.check === 0) {
       this.checkAuth()
       return Promise.reject(this.check);
@@ -54,6 +58,7 @@ class mail {
     // from,
     to, subject, text, html
   }) {
+    if (this.checking) return;
     if (this.check === 0) {
       this.checkAuth()
       return Promise.reject(this.check);
@@ -77,60 +82,63 @@ class mail {
     return Promise.resolve(this)
   }
   async checkAuth() {
+    if (this.check === 1) return Promise.resolve(this)
+    else if (this.check === 2) return Promise.reject(this.err)
+    else if(this.checking=true) return Promise.reject(`checking is running`);
+    this.checking = true
     const [host, port] = this.smtp
     let socket
-    let err
-    try {
-      return new Promise((resolve, reject) => {
-        socket = tls.connect({
-          host, port, timeout: 5000
-        }).on('data', (data) => {
-          data = data.toString()
-          console.log(data);
-          if (/^220/.test(data)) {
-            socket.write('helo localhost\r\n')
-          } else if (/^250/.test(data)) {
-            socket.write('auth login\r\n')
-          } else if (/^334/.test(data)) {
-            let temp = this.decode(data.slice(3))
-            if (/username/i.test(temp)) socket.write(this.encode(this.user.split('@')[0]) + '\r\n')
-            else socket.write(this.encode(this.pass) + '\r\n')
-          } else if (/^235/.test(data)) {
-            socket.write('quit\r\n')
-            console.log('auth check success')
-            this.check = 1
-            resolve(this)
+    return await new Promise((resolve, reject) => {
+      socket = tls.connect({
+        host, port, timeout: 5000
+      }).on('data', (data) => {
+        data = data.toString()
+        console.log(data);
+        if (/^220/.test(data)) {
+          socket.write('helo localhost\r\n')
+        } else if (/^250/.test(data)) {
+          socket.write('auth login\r\n')
+        } else if (/^334/.test(data)) {
+          let temp = this.decode(data.slice(3))
+          if (/username/i.test(temp)) socket.write(this.encode(this.user.split('@')[0]) + '\r\n')
+          else socket.write(this.encode(this.pass) + '\r\n')
+        } else if (/^235/.test(data)) {
+          socket.write('quit\r\n')
+          console.log('auth check success')
+          this.check = 1
+          this.checking = false
+          resolve(this)
 
-          } else if (/^5\d{2}/.test(data)) {
-            socket.write('quit\r\n')
-            err = new Error(data)
-            this.check = 2
-            reject(err)
-
-          } else if (/^221/.test(data)) console.log('close');
-          else {
-            socket.write('quit\r\n')
-            err = new Error('unknow error\n' + data)
-            this.check = 2
-            reject(err)
-          }
-        }).on('error', (e) => {
-          err = new Error('fail check\nplease ensure ssl port')
+        } else if (/^5\d{2}/.test(data)) {
+          socket.write('quit\r\n')
+          this.err = new this.Error(data)
           this.check = 2
-          reject(err)
+          this.checking = false
+          reject(this.err)
 
-        }).on('timeout', () => {
-          err = new Error('timeout')
+        } else if (/^221/.test(data)) console.log('check request has closed');
+        else {
+          socket.write('quit\r\n')
+          this.err = new this.Error('unknow this.error\n' + data)
           this.check = 2
-          reject(err)
+          this.checking = false
+          reject(this.err)
+        }
+      }).on('this.error', (e) => {
+        this.err = new this.Error('fail check\nplease ensure ssl port')
+        this.check = 2
+        this.checking = false
 
-        })
+        reject(this.err)
+      }).on('timeout', () => {
+        this.err = new this.Error('timeout')
+        this.check = 2
+        this.checking = false
+
+        reject(this.err)
+
       })
-    } catch (error) {
-      err = new Error('connect error\n' + error.message)
-      this.check = 2
-      return Promise.reject(err)
-    }
+    })
   }
   test({ to, subject, text, html }) {
     smtp(null, {

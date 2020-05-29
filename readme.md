@@ -9,7 +9,7 @@ npm install node-mail-client
 ## Usage
 ```js
 // these methods all returned promise
-
+// checkAuth is neccessary
 const mailClient=require('node-mail-client')
 let mail=new mailClient({
   user:`*@gmail.com`, // your user 
@@ -20,8 +20,13 @@ let mail=new mailClient({
 mail.checkAuth().then(self=>{
   self.send({ to, subject, text, html })
 }).catch(console.error)
+// checkAuth has excuted
+mail.checkAuth().then(self=>{
+  // do something
+}).catch(err=>{
+  console.log(err)  
+})
 
-mail.receive(setNum, callback)
 ```
 ## API
 ```ts

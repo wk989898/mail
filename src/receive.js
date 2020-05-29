@@ -5,7 +5,7 @@ const quotedPrintable = require('quoted-printable')
 
 
 module.exports = function imap(opt, setNum, callback) {
-  console.log('imap start receive email')
+  console.log('imap start receive email...')
   let result = []
   var _imap = new Imap(opt)
   
@@ -95,6 +95,7 @@ module.exports = function imap(opt, setNum, callback) {
           let a = partID[n++].flat(Infinity).sort();
           data.contentType = Array.from(new Set(a))
         }).on('end', () => {
+          data.seqno=seqno
           format(data)
           result.push(data)
         })
