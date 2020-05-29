@@ -26,7 +26,9 @@ mail.checkAuth().then(self=>{
 }).catch(err=>{
   console.log(err)  
 })
-
+// pass checkAuth
+mail.check=1  // 0: init  1:pass  2:fail
+mail.send({to, subject, text, html})
 ```
 ## API
 ```ts
