@@ -1,7 +1,7 @@
 # node-mail-client
 ## Intro
 a email client to receive and send mail  
-base IMAP and STMP
+base IMAP and SMTP
 ## Installation
 ``` js
 npm install node-mail-client
@@ -46,7 +46,7 @@ send:
      html: "<b>Hello world?</b>", // html body
   }  
 ```
-### Here is a [example](./example/test.js)
+### Here is an [example](./example/test.js)
 ## Documention
 you could find specify  about API  
 [send](https://nodemailer.com/about/)  
