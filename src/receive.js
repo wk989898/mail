@@ -2,6 +2,7 @@ const Imap = require('imap')
 const utf8 = require('utf8')
 const quotedPrintable = require('quoted-printable')
 
+var isArray = Array.isArray
 
 
 module.exports = function imap(opt, setNum) {
@@ -27,7 +28,7 @@ module.exports = function imap(opt, setNum) {
       hadErr = false;
 
     if (partID)
-      var data = { header: undefined, body: '', attrs: undefined };
+      var data = {};
 
     f.on('error', function (err) {
       hadErr = true;
@@ -46,13 +47,15 @@ module.exports = function imap(opt, setNum) {
           return;
         if (parts.length > 0) {
           let set = new Set()
-          parts.forEach(v => {
-            if (Array.isArray(v)) {
-              v.forEach(val => {
-                set.add(val[0])
-              })
-            }
-          })
+          function recursion(parts) {
+            parts.forEach(v => {
+              if (isArray(v[0])) {
+                rescu(v)
+              } else set.add(v[0])
+            })
+          }
+          recursion(parts)
+
           set = Array.from(set)
           parts.push(set)
           getMsgByUID(uid, cb, parts)
@@ -92,7 +95,7 @@ module.exports = function imap(opt, setNum) {
       })
     }
   }
-  
+
   return new Promise((resolve, reject) => {
     _imap.connect()
     _imap.on('ready', () => {
