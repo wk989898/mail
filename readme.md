@@ -9,27 +9,28 @@ npm install node-mail-client
 ## Usage
 ```js
 // these methods all returned promise
-// checkAuth is neccessary
+// checkAuth will auto invoke and it will check smtp auth
 const mailClient=require('node-mail-client')
 let mail=new mailClient({
-  user:`*@gmail.com`, // your user 
+  user:`*@gmail.com`, // your address
   pass:`***`, // your password
   imap:['imap.*.com',993], // [host,port,tls]
   smtp:['smtp.*.com',587], // [host,port,secure]
-  name:'Jack' //your name when send
+  name:'Jack' // your name when send
 })
-mail.checkAuth().then(self=>{
-  self.send({ to, subject, text, html })
-}).catch(console.error)
-// checkAuth has excuted
-mail.checkAuth().then(self=>{
+// receive
+mail.receive(null).then(result=>{
   // do something
 }).catch(err=>{
   console.log(err)  
 })
-// pass checkAuth
+// send 
+mail.send({ to, subject, text, html }).then(info=>{})
+.catch(console.error)
+
+// pass checkAuth chec
 mail.check=1  // 0: init  1:pass  2:fail
-mail.send({to, subject, text, html})
+// send or receive
 ```
 ## API
 ```ts
@@ -37,9 +38,6 @@ receive:
 setNum:(total):num|undefined =>{}
 total(Integer)  `INBOX` mailbox messages 
 num(string|undefined)  like `1:10` or `1:*`
-
-callback:(result):unknow=>{}
-result(Array)  item include `header` `body` `attr` `contentType`
 
 send:
   {

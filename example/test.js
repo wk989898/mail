@@ -6,17 +6,17 @@ let m = new mail({
   pass: '*',
   imap: ['imap.*.com', 993],
   smtp: ['smtp.*.com', 465],
-  name:'any'
+  name: 'any'
 })
 
 let total
-m.checkAuth().then(self => {
-  self.receive(num => {
-    total = num
-  }, result => {
-    console.log('receive %d emails', total);
-    fs.writeFile('./data.js', JSON.parse(result), () => { })
-  })
+m.receive(num => {
+  total = num
+}).then(result=>{
+  console.log('receive %d emails', total);
+  fs.writeFile('./data.js', JSON.parse(result), () => { })
+}).catch(err=>{
+  console.log(err);
 })
 
 const [to, subject, text, html] = [
@@ -28,6 +28,10 @@ const [to, subject, text, html] = [
 m.check = 1
 m.send({
   to, subject, text, html
+}).then(info=>{
+  console.log('messageId is',info.messageId);
+}).catch(err=>{
+  console.log('fail send\n',err);
 })
 
 

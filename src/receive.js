@@ -4,27 +4,13 @@ const quotedPrintable = require('quoted-printable')
 
 
 
-module.exports = function imap(opt, setNum, callback) {
+module.exports = function imap(opt, setNum) {
   console.log('imap start receive email...')
   let result = []
   var _imap = new Imap(opt)
-  
+
   function openBox(cb) {
     _imap.openBox('INBOX', cb)
-  }
-  function findTextPart(struct) {
-    let arr = []
-    for (var i = 0, len = struct.length, r; i < len; ++i) {
-      if (Array.isArray(struct[i])) {
-        if (r = findTextPart(struct[i]))
-          arr.push(r);
-      } else if (struct[i].type === 'text'
-        && (struct[i].subtype === 'plain'
-          || struct[i].subtype === 'html')) {
-        arr.push(struct[i].partID, struct[i].type + '/' + struct[i].subtype, struct[i].encoding)
-      }
-    }
-    return arr;
   }
 
   let n = 0
@@ -95,7 +81,7 @@ module.exports = function imap(opt, setNum, callback) {
           let a = partID[n++].flat(Infinity).sort();
           data.contentType = Array.from(new Set(a))
         }).on('end', () => {
-          data.seqno=seqno
+          data.seqno = seqno
           format(data)
           result.push(data)
         })
@@ -106,25 +92,43 @@ module.exports = function imap(opt, setNum, callback) {
       })
     }
   }
-
-  _imap.connect()
-  _imap.on('ready', () => {
-    openBox((err, box) => {
-      if(err) console.error('openBox error\n',err);
-      let num = `${box.messages.total}:*`
-      if (setNum) num = setNum(box.messages.total)||`${box.messages.total}:*`
-      getMsgByUID(num, function (err) {
-        if (err) console.error('getMsgByUID\n',err)
-        _imap.end()
-        console.log('success,received %d emails',result.length)
-        callback(result)
+  
+  return new Promise((resolve, reject) => {
+    _imap.connect()
+    _imap.on('ready', () => {
+      openBox((err, box) => {
+        if (err) reject(err)
+        let num = `${box.messages.total}:*`
+        if (setNum) num = setNum(box.messages.total) || `${box.messages.total}:*`
+        getMsgByUID(num, function (err) {
+          if (err) reject(err)
+          _imap.end()
+          console.log('success,received %d emails', result.length)
+          resolve(result)
+        })
       })
     })
+    _imap.on('error', (err) => {
+      console.log('imap connect error');
+      reject(err)
+    })
   })
+}
 
-  _imap.on('error',(err)=>{
-    console.log('imap connect error\n',err.message);
-  })
+
+function findTextPart(struct) {
+  let arr = []
+  for (var i = 0, len = struct.length, r; i < len; ++i) {
+    if (Array.isArray(struct[i])) {
+      if (r = findTextPart(struct[i]))
+        arr.push(r);
+    } else if (struct[i].type === 'text'
+      && (struct[i].subtype === 'plain'
+        || struct[i].subtype === 'html')) {
+      arr.push(struct[i].partID, struct[i].type + '/' + struct[i].subtype, struct[i].encoding)
+    }
+  }
+  return arr;
 }
 
 function format(res) {
