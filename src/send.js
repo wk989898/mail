@@ -24,7 +24,7 @@ module.exports = function smtp(opt, options) {
     let transporter = nodemailer.createTransport(opt);
     info=await transporter.sendMail(options)
   }
-  start()
+  return start()
   .then(()=>console.log('success,send mail',info.messageId))
   .catch(console.error)
 }

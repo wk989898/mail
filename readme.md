@@ -15,7 +15,8 @@ let mail=new mailClient({
   user:`*@gmail.com`, // your user 
   pass:`***`, // your password
   imap:['imap.*.com',993], // [host,port,tls]
-  smtp:['smtp.*.com',587] // [host,port,secure]
+  smtp:['smtp.*.com',587], // [host,port,secure]
+  name:'Jack' //your name when send
 })
 mail.checkAuth().then(self=>{
   self.send({ to, subject, text, html })

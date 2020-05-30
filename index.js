@@ -1,24 +1,23 @@
 const imap = require('./src/receive.js')
 const smtp = require('./src/send.js')
-const net = require('net')
 const tls = require('tls')
 
 class mail {
-  // error collect
   /**
    * @param {string} user complete address
    * @param {string} pass  password
    * @param {Array} imap [host,port[,option]]
    * @param {Array} smtp [host[,port,option]]
    */
-  constructor({ user, pass, imap, smtp }) {
+  constructor({ user, pass, imap, smtp, name }) {
     this.user = user
     this.pass = pass
     this.imap = imap
     this.smtp = smtp
+    this.name = name||''
     this.check = 0
     this.checking = false
-    this.err='init'
+    this.err = 'init'
   }
   /**
    * @param {Function} setNum 
@@ -75,16 +74,16 @@ class mail {
         pass: this.pass, // generated ethereal password
       }
     }
+    const from = `"${this.name}" <${this.user}>`
     smtp(opt, {
-      from: this.user,
-      to, subject, text, html
+      from, to, subject, text, html
     })
     return Promise.resolve(this)
   }
   async checkAuth() {
     if (this.check === 1) return Promise.resolve(this)
     else if (this.check === 2) return Promise.reject(this.err)
-    else if(this.checking=true) return Promise.reject(`checking is running`);
+    else if (this.checking = true) return Promise.reject(`checking is running`);
     this.checking = true
     const [host, port] = this.smtp
     let socket

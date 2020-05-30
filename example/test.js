@@ -5,20 +5,29 @@ let m = new mail({
   user: '*@*.com',
   pass: '*',
   imap: ['imap.*.com', 993],
-  smtp: ['smtp.*.com', 465]
+  smtp: ['smtp.*.com', 465],
+  name:'any'
 })
 
-let num
-
+let total
 m.checkAuth().then(self => {
-  self.receive((total) => {
-    num = total
+  self.receive(num => {
+    total = num
   }, result => {
-    console.log('message total :', num)
-    fs.writeFile('./data.js', 'var data=' + JSON.stringify(result), () => { })
+    console.log('receive %d emails', total);
+    fs.writeFile('./data.js', JSON.parse(result), () => { })
   })
-}).catch(e => {
-  console.log('check fail');
+})
+
+const [to, subject, text, html] = [
+  '*@163.com',
+  'test',
+  'hello',
+  'html'
+]
+m.check = 1
+m.send({
+  to, subject, text, html
 })
 
 
