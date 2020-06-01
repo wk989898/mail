@@ -12,8 +12,8 @@ let m = new mail({
 let total
 m.receive(num => {
   total = num
+  return `${total}:*`
 }).then(result=>{
-  console.log('receive %d emails', total);
   fs.writeFile('./data.js', JSON.parse(result), () => { })
 }).catch(err=>{
   console.log(err);

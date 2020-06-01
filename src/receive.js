@@ -1,6 +1,7 @@
 const Imap = require('imap')
 const utf8 = require('utf8')
 const quotedPrintable = require('quoted-printable')
+require('./polyfill')
 
 var isArray = Array.isArray
 
@@ -50,12 +51,12 @@ module.exports = function imap(opt, setNum) {
           function recursion(parts) {
             parts.forEach(v => {
               if (isArray(v[0])) {
-                rescu(v)
-              } else set.add(v[0])
+                recursion(v)
+              } else if (v[0]) set.add(v[0])
+              else return;
             })
           }
           recursion(parts)
-
           set = Array.from(set)
           parts.push(set)
           getMsgByUID(uid, cb, parts)
@@ -81,12 +82,14 @@ module.exports = function imap(opt, setNum) {
           })
         }).on('attributes', function (attrs) {
           data.attrs = attrs;
-          let a = partID[n++].flat(Infinity).sort();
+          let a = partID[n++].flat(Infinity).sort()
+          console.log(a)
           data.contentType = Array.from(new Set(a))
         }).on('end', () => {
           data.seqno = seqno
           format(data)
           result.push(data)
+          data = {}
         })
       });
       f.on('end', function () {
@@ -102,11 +105,16 @@ module.exports = function imap(opt, setNum) {
       openBox((err, box) => {
         if (err) reject(err)
         let num = `${box.messages.total}:*`
-        if (setNum) num = setNum(box.messages.total) || `${box.messages.total}:*`
+        const numType = type(setNum)
+        if (numType === 'function') num = setNum(box.messages.total)
+        else if (numType === 'string') num = setNum
+        let same = num.split(":")
+        if (same[0] === same[1]) reject('same')
         getMsgByUID(num, function (err) {
           if (err) reject(err)
           _imap.end()
-          console.log('success,received %d emails', result.length)
+          if (result.length > 0)
+            console.log('success,received %d emails', result.length)
           resolve(result)
         })
       })
@@ -139,4 +147,8 @@ function format(res) {
   contentType.forEach(v => {
     if (/base64/i.test(v)) res.body = `<img src="data:image/jpeg;base64,${body.slice(0, 64)}" />`
   })
+}
+
+function type(p) {
+  return Object.prototype.toString.call(p).slice(8).replace(']', '').toLowerCase()
 }

@@ -35,11 +35,9 @@ mail.check=1  // 0: init  1:pass  2:fail
 ## API
 ```ts
 receive:
-setNum:(total):num|undefined =>{}
-total(Integer)  `INBOX` mailbox messages 
-num(string|undefined)  like `1:10` or `1:*`
-
-send:
+setNum:String|Function total=>{}
+ returned like '1:10' or '1:*' //total is box messages total
+send:Object
   {
      to: "any@163.com", // list of receivers
      subject: "Hello", // Subject line
