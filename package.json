@@ -26,13 +26,12 @@
   },
   "homepage": "https://github.com/wk989898/mail#readme",
   "dependencies": {
+    "@types/jest": "^25.2.3",
     "imap": "^0.8.19",
+    "jest": "^26.0.1",
     "nodemailer": "^6.4.6",
     "quoted-printable": "^1.0.1",
     "utf8": "^3.0.0"
   },
-  "devDependencies": {
-    "@types/jest": "^25.2.3",
-    "jest": "^26.0.1"
-  }
+  "devDependencies": {}
 }
