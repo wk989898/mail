@@ -113,12 +113,12 @@ class mail {
           } else if (/^221/.test(data)) console.log('check request has closed');
           else {
             socket.write('quit\r\n')
-            this.err = new Error('unknow this.error\n' + data)
+            this.err = new Error('unknow error\n' + data)
             this.check = 2
             reject(this.err)
           }
         }).on('error', (e) => {
-          this.err = new Error('fail check\nplease ensure ssl port')
+          this.err = new Error('fail check\nplease check your address or port')
           this.check = 2
 
           reject(this.err)
@@ -138,7 +138,7 @@ class mail {
 
 
   test({ to, subject, text, html }) {
-    smtp(null, {
+    return smtp(null, {
       to, subject, text, html
     })
   }

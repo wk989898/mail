@@ -1,0 +1,4 @@
+language: python
+script:
+ - npm run test
+node_js: 'node'

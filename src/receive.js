@@ -83,7 +83,6 @@ module.exports = function imap(opt, setNum) {
         }).on('attributes', function (attrs) {
           data.attrs = attrs;
           let a = partID[n++].flat(Infinity).sort()
-          console.log(a)
           data.contentType = Array.from(new Set(a))
         }).on('end', () => {
           data.seqno = seqno

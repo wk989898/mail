@@ -1,13 +1,13 @@
 {
   "name": "node-mail-client",
-  "version": "1.2.6",
+  "version": "1.2.7",
   "description": "email client",
   "main": "index.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest test/index.test.js",
     "babel": "babel index.js "
   },
   "repository": {
@@ -31,5 +31,8 @@
     "quoted-printable": "^1.0.1",
     "utf8": "^3.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jest": "^25.2.3",
+    "jest": "^26.0.1"
+  }
 }
