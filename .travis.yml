@@ -2,3 +2,6 @@ language: python
 script:
  - npm run test
 node_js: 'node'
+cache:
+  directories:
+  - node_modules

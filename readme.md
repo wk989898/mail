@@ -1,4 +1,5 @@
 # node-mail-client
+[![Build Status](https://travis-ci.com/wk989898/mail.svg?branch=master)](https://travis-ci.com/wk989898/mail)
 ## Intro
 a email client to receive and send mail  
 base IMAP and SMTP
