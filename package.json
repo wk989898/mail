@@ -17,7 +17,8 @@
   "keywords": [
     "mail",
     "smtp",
-    "imap"
+    "imap",
+    "mail-client"
   ],
   "author": "WK989898",
   "license": "MIT",

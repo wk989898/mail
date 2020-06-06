@@ -1,6 +1,8 @@
 language: python
 script:
  - npm test
+install: 
+  - npm install
 node_js: 'node'
 cache:
   directories:
