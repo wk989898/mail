@@ -1,21 +1,4 @@
-const mail = require('../index')
-const opt = {
-  user: 'any@gmail.com',
-  pass: '***',
-  imap: ['imap.gmail.com', 993],
-  smtp: '',
-  name: 'Jack'
-}
-const msg = {
-  to: '*@gmail.com',
-  subject: 'test',
-  text: 'hello',
-  html: 'html'
-}
-const regResponse = /^250 Accepted \[STATUS=new MSGID=.+\]$/
-const regMessageId = /^\<.+@example\.com\>$/
-const regNumber=/\d+/
-const client = new mail(opt)
+const { client, regMessageId, regMsg, regNumber, regResponse, msg } = require('./client')
 
 it('checkAuth', async () => {
   await client.checkAuth().catch(e => {
@@ -29,17 +12,17 @@ it('receive', async () => {
   client.check = 1
   client.smtp = ['smtp.gmail.com', 465]
   await client.receive().catch(e => {
-    expect(e.message).toEqual('Timed out while connecting to server')
+    expect(e.message).toStrictEqual('Timed out while connecting to server')
   })
-}, 30000)
+}, 50000)
 
 it('send', async () => {
   client.check = 1
   client.smtp = ['smtp.gmail.com', 465]
   await client.send(msg).catch(e => {
-    expect(e.message).toEqual('connect ETIMEDOUT 64.233.189.109:465')
+    expect(regMsg.test(e.message)).toBe(true)
   })
-}, 30000)
+}, 50000)
 
 it('testAccount', async () => {
   await client.test(msg).then(res => {
@@ -55,4 +38,4 @@ it('testAccount', async () => {
     expect(regResponse.test(response)).toBe(true)
     expect(regMessageId.test(messageId)).toBe(true)
   })
-}, 30000)
+}, 50000)
