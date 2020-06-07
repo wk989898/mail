@@ -144,7 +144,12 @@ function findTextPart(struct) {
 function format(res) {
   let { body, contentType } = res
   contentType.forEach(v => {
-    if (/base64/i.test(v)) res.body = `<img src="data:image/jpeg;base64,${body.slice(0, 64)}" />`
+    if (/base64/i.test(v))
+      try {
+        res.body = new Buffer(body, 'base64').toString()
+      } catch (error) {
+        res.body = `<img data:image/jpg;base64,${body}/>`
+      }
   })
 }
 

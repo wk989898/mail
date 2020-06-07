@@ -1,6 +1,6 @@
 {
   "name": "node-mail-client",
-  "version": "1.2.7",
+  "version": "1.2.8",
   "description": "email client",
   "main": "index.js",
   "directories": {
@@ -8,7 +8,8 @@
   },
   "scripts": {
     "test": "jest test/index.test.js",
-    "babel": "babel index.js "
+    "babel": "babel index.js",
+    "publish": "npm publish --registry https://registry.npmjs.org/"
   },
   "repository": {
     "type": "git",

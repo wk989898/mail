@@ -1,4 +1,8 @@
 language: node_js
+script:
+ - npm test
+install: 
+  - npm install
 node_js: 
   - node
 cache:

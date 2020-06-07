@@ -1,4 +1,4 @@
-const { client, regMessageId, regMsg, regNumber, regResponse, msg } = require('./client')
+const { client, regMessageId, regMsg, regNumber, regResponse, msg } =require( './client')
 
 it('checkAuth', async () => {
   await client.checkAuth().catch(e => {
