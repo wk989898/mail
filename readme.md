@@ -30,7 +30,7 @@ mail.receive(null).then(result=>{
 mail.send({ to, subject, text, html }).then(info=>{})
 .catch(console.error)
 
-// pass checkAuth chec
+// pass checkAuth check
 mail.check=1  // 0: init  1:pass  2:fail
 // send or receive
 ```
@@ -38,7 +38,8 @@ mail.check=1  // 0: init  1:pass  2:fail
 ```ts
 receive:
 setNum:String|Function total=>{}
- returned like '1:10' or '1:*' //total is box messages total
+ returned like '1:10' or '1:*' //total is box messages total  
+
 send:Object
   {
      to: "any@163.com", // list of receivers
