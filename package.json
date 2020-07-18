@@ -1,6 +1,6 @@
 {
   "name": "node-mail-client",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "description": "email client",
   "main": "index.js",
   "directories": {
@@ -28,12 +28,13 @@
   },
   "homepage": "https://github.com/wk989898/mail#readme",
   "dependencies": {
-    "@types/jest": "^25.2.3",
     "imap": "^0.8.19",
-    "jest": "^26.0.1",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^6.4.10",
     "quoted-printable": "^1.0.1",
     "utf8": "^3.0.0"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/jest": "^25.2.3",
+    "jest": "^26.1.0"
+  }
 }
