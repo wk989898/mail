@@ -35,10 +35,11 @@ mail.check=1  // 0: init  1:pass  2:fail
 // send or receive
 ```
 ## API
-```ts
+```js
 receive:
 //@param: {string | (total:number)=>string | null} setNum
-//returned like '1:10' or '1:*' //total is box messages total  
+//string alike '1:10' or '1:*' 
+//total is box messages total  
 receive('1:*').then()
 receive(total=>`1:${total-10}`).then()
 receive(null).then()
