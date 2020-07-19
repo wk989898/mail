@@ -37,16 +37,23 @@ mail.check=1  // 0: init  1:pass  2:fail
 ## API
 ```ts
 receive:
-setNum:String|Function total=>{}
- returned like '1:10' or '1:*' //total is box messages total  
+//@param: {string | (total:number)=>string | null} setNum
+//returned like '1:10' or '1:*' //total is box messages total  
+receive('1:*').then()
+receive(total=>`1:${total-10}`).then()
+receive(null).then()
 
-send:Object
-  {
-     to: "any@163.com", // list of receivers
-     subject: "Hello", // Subject line
-     text: "Hello world? text", // plain text body
-     html: "<b>Hello world?</b>", // html body
-  }  
+send:
+/*
+* @param:Object
+*  {
+*     to: "any@163.com", // list of receivers
+*     subject: "Hello", // Subject line
+*     text: "Hello world? text", // plain text body
+*     html: "<b>Hello world?</b>", // html body
+*  }
+*/
+
 ```
 ### Here is an [example](./example/test.js)
 ## Documention
