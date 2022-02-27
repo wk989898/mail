@@ -56,7 +56,7 @@ send:
 */
 
 ```
-### Here is an [example](./example/test.js)
+### Here is an [example](./example/main.js)
 ## Documention
 you could find specify  about API  
 [send](https://nodemailer.com/about/)  
