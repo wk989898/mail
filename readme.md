@@ -2,16 +2,15 @@
 [![Build Status](https://travis-ci.com/wk989898/mail.svg?branch=master)](https://travis-ci.com/wk989898/mail)
 ![npm](https://img.shields.io/npm/v/node-mail-client)
 ## Intro
-a email client to receive and send mail  
-base IMAP and SMTP
+An email client for receiving and sending emails  
+Based IMAP and SMTP
 ## Installation
 ``` js
 npm install node-mail-client
 ```
 ## Usage
 ```js
-// these methods all returned promise
-// checkAuth will auto invoke and it will check smtp auth
+// checkAuth will be called automatically and it will check email account authenticity
 const mailClient=require('node-mail-client')
 let mail=new mailClient({
   user:`*@gmail.com`, // your address
@@ -30,16 +29,15 @@ mail.receive(null).then(result=>{
 mail.send({ to, subject, text, html }).then(info=>{})
 .catch(console.error)
 
-// pass checkAuth check
+// skip checkAuth check
 mail.check=1  // 0: init  1:pass  2:fail
-// send or receive
 ```
 ## API
 ```js
 receive:
 //@param: {string | (total:number)=>string | null} setNum
 //string alike '1:10' or '1:*' 
-//total is box messages total  
+//'total' is the total number of box messages
 receive('1:*').then()
 receive(total=>`1:${total-10}`).then()
 receive(null).then()
